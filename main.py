@@ -1,10 +1,13 @@
+import os
+
 import pygame
 import sys
-import Vector
-
+from Vector import *
+from Button import *
 # Initialize Pygame
 pygame.init()
-
+# more concurrent sounds
+pygame.mixer.set_num_channels(32)
 # Window settings
 WIDTH, HEIGHT = 800, 600
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -35,6 +38,7 @@ BULLET_LIMIT = 50 # bullets on the screen at a time
 # We need a limiter to the recoil and some variables to control how far left and right the bullets land
 # We need counters to ensure that the gun does not fire tooooo many bullets to the left or right
 # We need a max side offset, the bullet will never fire futher than a specified distance
+CENTER_AXIS = Custom_Vector(0,0,1)
 
 FONT = pygame.font.SysFont(None, 36)
 
@@ -46,14 +50,38 @@ button_color_hover = (80, 80, 80)
 button_color_held = (255, 0, 0)
 button_outline_color = BULLET_HIT_COLOUR
 
-button_rect = pygame.Rect(
+MAX_RECOIL_RESET_TIME = 1 # second
+
+# Create buttons
+shoot_button = Button(
     WIDTH - button_width - button_margin,
     HEIGHT - button_height - button_margin,
     button_width,
     button_height,
+    "SHOOT",
+    FONT,
+    button_color_default,
+    button_color_hover,
+    button_color_held,
+    button_outline_color
 )
+
+clear_button = Button(
+    button_margin,
+    HEIGHT - button_height - button_margin,
+    button_width,
+    button_height,
+    "CLEAR",
+    FONT,
+    button_color_default,
+    button_color_hover,
+    button_color_held,
+    button_outline_color
+)
+SHOOT_SOUND = pygame.mixer.Sound("SFX/ShotSFX.mp3")
 def ShootGun():
     # This function calculates where the bullet will be fired based on previous bullet location and recoil timers
+    SHOOT_SOUND.play()
     return
 
 def drawBulletHit(x, y):
@@ -64,41 +92,37 @@ def drawBulletHit(x, y):
 def drawLineFromPoints(lx, ly, rx, ry):
     return
 
+time_since_last_bullet = 0
 
 running = True
 while running:
     mouse_pos = pygame.mouse.get_pos()
     mouse_pressed = pygame.mouse.get_pressed()
+    dt = clock.tick(120) / 1000
+    width, height = screen.get_size()
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-    dt = clock.tick(60) / 1000  # Frame time in seconds (not used yet)
-    width, height = screen.get_size()
-    # Determine button color
-    if button_rect.collidepoint(mouse_pos):
-        if mouse_pressed[0]:
-            color = button_color_held
-            ShootGun()
-        else:
-            color = button_color_hover
-    else:
-        color = button_color_default
 
-        # Fill screen with dark gray
+        if clear_button.is_clicked(event):
+            print("CLEARING CANVAS")
+
+    # Update buttons
+    shoot_button.update(mouse_pos, mouse_pressed)
+    clear_button.update(mouse_pos, mouse_pressed)
+    currTime = pygame.time.get_ticks()
+
+    if (shoot_button.is_held and (time_since_last_bullet == 0 or currTime - time_since_last_bullet >= (1000/FIRE_RATE))):
+        # Do something while SHOOT is being held
+        time_since_last_bullet = currTime
+        print("SHOT FIRED")
+        ShootGun()
+    # Draw scene
     screen.fill((30, 30, 30))
-    # drawBulletHit(width//2, height//2)
-    # Draw button fill
-    pygame.draw.rect(screen, color, button_rect)
+    shoot_button.draw(screen)
+    clear_button.draw(screen)
 
-    # Draw button outline
-    pygame.draw.rect(screen, button_outline_color, button_rect, 3)
-
-    # Render and draw text centered on button
-    text_surf = FONT.render("SHOOT", True, BULLET_HIT_COLOUR)
-    text_rect = text_surf.get_rect(center=button_rect.center)
-    screen.blit(text_surf, text_rect)
-    # Flip display
     pygame.display.flip()
     clock.tick(120)
 
