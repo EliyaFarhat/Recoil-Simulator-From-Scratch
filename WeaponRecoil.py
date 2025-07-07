@@ -13,6 +13,7 @@ class WeaponRecoil:
         self.recoilDecayRate = recoilDecayRate
         self.maxTiltOffset = maxTiltOffset
 
+        self.lastShotTime = None
         self.recoilTimer = 0.0
         self.lastUpdateTime = None
 
@@ -29,6 +30,7 @@ class WeaponRecoil:
 
         self.recoilTimer = 0.0
         self.lastUpdateTime = None
+        self.lastShotTime = None
 
     def update(self):
         currentTime = time.time()
@@ -38,22 +40,25 @@ class WeaponRecoil:
 
         elapsed = currentTime - self.lastUpdateTime
         self.lastUpdateTime = currentTime
-
+        self.lastShotTime = currentTime
         # Decay recoil timer
         self.recoilTimer -= self.recoilDecayRate * elapsed
+
         if self.recoilTimer < 0:
             self.recoilTimer = 0.0
 
     def shoot(self):
-        if self.recoilTimer == 0:
-            recoil_angle = self.firstShotError
-            y_offset = 0.0
-            tilt_offset = 0.0
-            self.recoilTimer += self.timeToReachMaxRecoil / 10
-            return recoil_angle, y_offset, tilt_offset, 0
+        currentTime = time.time()
+        self.lastUpdateTime = currentTime
+        if self.lastShotTime is None:
+            self.lastShotTime = currentTime
 
-        # Add recoil buildup
-        self.recoilTimer += self.timeToReachMaxRecoil / 10
+        # Calculate time since last shot
+        elapsed = currentTime - self.lastShotTime
+        self.lastShotTime = currentTime
+
+        # Apply recoil buildup based on real time
+        self.recoilTimer += elapsed
         if self.recoilTimer > self.timeToReachMaxRecoil:
             self.recoilTimer = self.timeToReachMaxRecoil
 
@@ -69,8 +74,6 @@ class WeaponRecoil:
             eased_progress = ((progress - threshold) / (1 - threshold)) ** exponent
 
         recoil_angle = self.firstShotError + eased_progress * (self.maxRecoilAngle - self.firstShotError)
-
-        # Keep offsets linear
         y_offset = progress * self.maxYOffset
         tilt_offset = progress * self.maxTiltOffset
 

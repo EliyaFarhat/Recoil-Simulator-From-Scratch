@@ -48,20 +48,31 @@ button_width, button_height = 150, 60
 button_margin = 20
 button_color_default = (30, 30, 30)
 button_color_hover = (80, 80, 80)
-button_color_held = (255, 0, 0)
+button_color_held = (54, 14, 14)
 button_outline_color = BULLET_HIT_COLOUR
 
 Weapons = {
     "Vandal" : {
-        "Ammo" : 25,
+        "Ammo" : 50,
         "fireRate" : 9.75,
-        "timeToReachMaxRecoil": 2,
+        "timeToReachMaxRecoil": 1.5,
         "maxRecoilAngle" : 1.00,
         "firstShotError": 0.25,
         "maxYOffset" : 0.05,
-        "recoilDecayRate" : 1,
+        "recoilDecayRate" : 3,
         "Name": "Vandal",
         "maxTiltOffset" : 0.015,
+    },
+    "Phantom": {
+        "Ammo": 50,
+        "fireRate": 11,
+        "timeToReachMaxRecoil": 2,
+        "maxRecoilAngle": 1.00,
+        "firstShotError": 0.2,
+        "maxYOffset": 0.05,
+        "recoilDecayRate": 1.5,
+        "Name": "Vandal",
+        "maxTiltOffset": 0.015,
     },
 }
 
@@ -70,7 +81,7 @@ currentWeapon = Weapons["Vandal"]
 
 MAX_RECOIL_RESET_TIME = 1 # second
 
-TARGET_DISTANCE = 5000 # units away
+TARGET_DISTANCE = 2800 # units away
 
 # Create buttons
 shoot_button = Button(
@@ -181,7 +192,8 @@ while running:
         if clear_button.is_clicked(event):
             ClearScreen(list_of_bullets)
             print("CLEARING CANVAS")
-    weaponRecoil.update()
+
+
     recoil_progress = weaponRecoil.GetProgress()
     # Define bar dimensions and position (right side)
     bar_width = 20
@@ -202,6 +214,9 @@ while running:
         time_since_last_bullet = currTime
 
         ShootGun()
+    else:
+        if not shoot_button.is_held:
+            weaponRecoil.update()
 
     # Draw scene
 
