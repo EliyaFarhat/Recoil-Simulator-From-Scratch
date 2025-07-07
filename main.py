@@ -1,9 +1,10 @@
 import os
-
 import pygame
 import sys
 from Vector import *
 from Button import *
+import threading
+
 # Initialize Pygame
 pygame.init()
 # more concurrent sounds
@@ -31,7 +32,7 @@ AMMO = 25
 FIRE_RATE = 9.75 # RDS/SEC
 FIRST_SHOT_SPREAD = 0.25 # DEG
 
-BULLET_LIMIT = 50 # bullets on the screen at a time
+BULLET_LIMIT = 25 # bullets on the screen at a time
 
 # Now we need to define variables that will control the recoil pattern
 # We need a timer that will keep track of the time since last fired and if the gun is fired again while this timer is still active, recoil will be applied without the buildup
@@ -39,6 +40,8 @@ BULLET_LIMIT = 50 # bullets on the screen at a time
 # We need counters to ensure that the gun does not fire tooooo many bullets to the left or right
 # We need a max side offset, the bullet will never fire futher than a specified distance
 CENTER_AXIS = Custom_Vector(0,0,1)
+
+list_of_bullets = []
 
 FONT = pygame.font.SysFont(None, 36)
 
@@ -51,6 +54,8 @@ button_color_held = (255, 0, 0)
 button_outline_color = BULLET_HIT_COLOUR
 
 MAX_RECOIL_RESET_TIME = 1 # second
+
+TARGET_DISTANCE = 2500 # units away
 
 # Create buttons
 shoot_button = Button(
@@ -79,10 +84,24 @@ clear_button = Button(
     button_outline_color
 )
 SHOOT_SOUND = pygame.mixer.Sound("SFX/ShotSFX.mp3")
+
+def FindIntersection(randomVector, distanceOfPlane):
+    t = distanceOfPlane/randomVector.z
+    tx, ty, tz = randomVector.x * t, randomVector.y * t, t*randomVector.z
+    return Custom_Vector(tx, ty, tz)
 def ShootGun():
     # This function calculates where the bullet will be fired based on previous bullet location and recoil timers
     SHOOT_SOUND.play()
-    return
+    randomVector = random_vector_in_cone(FIRST_SHOT_SPREAD) # modify this to add previous bullet dependence
+    intersection = FindIntersection(randomVector, TARGET_DISTANCE)
+    # Transform intersection for pygame
+    screen_x = width // 2 + intersection.x
+    screen_y = height // 2 - intersection.y
+    print(screen_x, screen_y)
+    # Check if point is within screen bounds
+    if 0 <= screen_x < width and 0 <= screen_y < height:
+        AddBullet(screen_x, screen_y, list_of_bullets)
+        drawBulletHit(screen_x, screen_y)
 
 def drawBulletHit(x, y):
     thickness = 0 if FILL_CIRCLE else 1
@@ -94,20 +113,37 @@ def drawLineFromPoints(lx, ly, rx, ry):
 
 time_since_last_bullet = 0
 
+def ClearScreen(bullets):
+    bullets.clear()
+def AddBullet(x, y, bullets):
+    if len(bullets) == BULLET_LIMIT:
+        bullets[0], bullets[-1] = bullets[-1], bullets[0]
+        bullets.pop()
+    bullets.append((x, y))
+def LoadBullets(bullets):
+    for x, y in bullets:
+        drawBulletHit(x, y)
+
+
+
 running = True
 while running:
     mouse_pos = pygame.mouse.get_pos()
     mouse_pressed = pygame.mouse.get_pressed()
     dt = clock.tick(120) / 1000
     width, height = screen.get_size()
-
+    screen.fill((30, 30, 30))
+    pygame.draw.circle(screen, (59, 65, 74), (int(width // 2), int(height // 2)), 300, 1)
+    pygame.draw.circle(screen, (59, 65, 74), (int(width//2), int(height//2)), 200, 1)
+    pygame.draw.circle(screen, (59, 65, 74), (int(width//2), int(height//2)), 80, 1)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-
         if clear_button.is_clicked(event):
+            ClearScreen(list_of_bullets)
             print("CLEARING CANVAS")
 
+    LoadBullets(list_of_bullets)
     # Update buttons
     shoot_button.update(mouse_pos, mouse_pressed)
     clear_button.update(mouse_pos, mouse_pressed)
@@ -118,8 +154,9 @@ while running:
         time_since_last_bullet = currTime
         print("SHOT FIRED")
         ShootGun()
+
     # Draw scene
-    screen.fill((30, 30, 30))
+
     shoot_button.draw(screen)
     clear_button.draw(screen)
 
