@@ -59,7 +59,7 @@ Weapons = {
         "maxRecoilAngle" : 1.00,
         "firstShotError": 0.25,
         "maxYOffset" : 0.05,
-        "recoilDecayRate" : 3,
+        "recoilDecayRate" : 2.5,
         "Name": "Vandal",
         "maxTiltOffset" : 0.015,
     },
