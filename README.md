@@ -13,7 +13,6 @@ A customizable and interactive **first-person shooter (FPS) recoil simulator** b
 - 📈 Visual **recoil progress bar** showing buildup over time
 - ⬆️ Dynamic recoil and tilt offset logic
 - 🔄 Recoil decay (with protection against abuse from spam-clicking)
-- 🎨 Toggle filled circles, draw lines, and customize visuals
 - 🔊 Integrated SFX when firing
 
 ---
