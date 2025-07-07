@@ -1,9 +1,5 @@
-import os
-import pygame
-import sys
 from Vector import *
 from Button import *
-import threading
 
 # Initialize Pygame
 pygame.init()
