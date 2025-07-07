@@ -71,7 +71,7 @@ Weapons = {
         "firstShotError": 0.2,
         "maxYOffset": 0.05,
         "recoilDecayRate": 1.5,
-        "Name": "Vandal",
+        "Name": "Phantom",
         "maxTiltOffset": 0.015,
     },
 }
