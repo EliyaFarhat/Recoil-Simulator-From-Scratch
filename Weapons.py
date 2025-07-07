@@ -1,0 +1,35 @@
+Weapons = {
+    "VANDAL": {
+        "Ammo": 50,
+        "fireRate": 9.75,
+        "timeToReachMaxRecoil": 1.5,
+        "maxRecoilAngle": 1.00,
+        "firstShotError": 0.25,
+        "maxYOffset": 0.05,
+        "recoilDecayRate": 2.5,
+        "Name": "VANDAL",
+        "maxTiltOffset": 0.015,
+    },
+    "PHANTOM": {
+        "Ammo": 50,
+        "fireRate": 11,
+        "timeToReachMaxRecoil": 2,
+        "maxRecoilAngle": 1.00,
+        "firstShotError": 0.2,
+        "maxYOffset": 0.05,
+        "recoilDecayRate": 1.5,
+        "Name": "PHANTOM",
+        "maxTiltOffset": 0.015,
+    },
+    "STINGER": {
+        "Ammo": 50,
+        "fireRate": 16,
+        "timeToReachMaxRecoil": 0.8,
+        "maxRecoilAngle": 1.30,
+        "firstShotError": 0.65,
+        "maxYOffset": 0.08,
+        "recoilDecayRate": 1,
+        "Name": "STINGER",
+        "maxTiltOffset": 0.015,
+    }
+}
