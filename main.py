@@ -96,7 +96,7 @@ next_weapon_button = Button(WIDTH - 60 - button_margin,
                             button_outline_color)
 
 SHOOT_SOUND = pygame.mixer.Sound("SFX/ShotSFX.mp3")
-TARGET_DISTANCE = 5000
+TARGET_DISTANCE = 2500
 MAX_RECOIL_RESET_TIME = 1
 
 def draw_recoil_progress_bar(surface, x, y, width, height, progress,

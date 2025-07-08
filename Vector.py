@@ -48,5 +48,5 @@ def random_vector_in_cone(max_angle_deg, defaultAngle, progress, maxOffset):
     x = math.sin(phi) * math.cos(alpha)
     y = math.sin(phi) * math.sin(alpha) + (progress * maxOffset)
     z = u
-    print(x, y, z)
+
     return Custom_Vector(x, y, z)

@@ -77,6 +77,6 @@ class WeaponRecoil:
         y_offset = progress * self.maxYOffset
         tilt_offset = progress * self.maxTiltOffset
 
-        print(f"angle={recoil_angle:.2f}  progress={progress:.2f}")
+
         return recoil_angle, y_offset, tilt_offset, progress
 
