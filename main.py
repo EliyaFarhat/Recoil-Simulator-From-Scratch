@@ -96,7 +96,7 @@ next_weapon_button = Button(WIDTH - 60 - button_margin,
                             button_outline_color)
 
 SHOOT_SOUND = pygame.mixer.Sound("SFX/ShotSFX.mp3")
-TARGET_DISTANCE = 2800
+TARGET_DISTANCE = 5000
 MAX_RECOIL_RESET_TIME = 1
 
 def draw_recoil_progress_bar(surface, x, y, width, height, progress,
@@ -118,7 +118,12 @@ def ShootGun():
     screen_x = WIDTH // 2 + intersection.x
     screen_y = HEIGHT // 2 - intersection.y
 
-    if 0 <= screen_x < WIDTH and 0 <= screen_y < HEIGHT:
+    # Compute distance from screen center
+    dx = screen_x - WIDTH // 2
+    dy = screen_y - HEIGHT // 2
+    distance_from_center = (dx ** 2 + dy ** 2) ** 0.5
+
+    if distance_from_center <= 300:
         AddBullet(screen_x, screen_y, list_of_bullets)
         drawBulletHit(screen_x, screen_y)
 

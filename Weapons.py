@@ -28,7 +28,7 @@ Weapons = {
         "maxRecoilAngle": 1.30,
         "firstShotError": 0.65,
         "maxYOffset": 0.08,
-        "recoilDecayRate": 1,
+        "recoilDecayRate": 0.5,
         "Name": "STINGER",
         "maxTiltOffset": 0.015,
     }
