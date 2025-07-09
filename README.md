@@ -1,6 +1,6 @@
 # 🎯 Recoil Simulator
 
-A customizable and interactive **first-person shooter (FPS) recoil simulator** built using Python and Pygame. This tool replicates the feel of weapon recoil found in games like Valorant, CS:GO, and other tactical shooters — with an emphasis on **3D simulation** and accurate spatial projection.
+A customizable and interactive **first-person shooter (FPS) recoil simulator** built using Python and Pygame. This tool replicates the feel of weapon recoil found in games like Valorant, CS:GO, and other tactical shooters, with an emphasis on **3D simulation** and accurate spatial projection.
 
 ---
 
@@ -41,4 +41,4 @@ The vector originates from the player's position and intersects with a plane (th
 
 The point of intersection determines where the bullet lands on the screen.
 
-The higher the distance, the more spread you'll see from small changes in recoil angle — just like in real games.
+The higher the distance, the more spread you'll see from small changes in recoil angle, like in real games.
