@@ -17,7 +17,7 @@ A customizable and interactive **first-person shooter (FPS) recoil simulator** b
 
 ---
 ## 🎬 Demo
-
+https://github.com/user-attachments/assets/98124daa-0090-4c35-8e1e-0ed0ad632cca
 ---
 
 ## 🧰 Requirements
