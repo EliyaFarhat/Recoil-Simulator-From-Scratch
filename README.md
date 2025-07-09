@@ -16,6 +16,9 @@ A customizable and interactive **first-person shooter (FPS) recoil simulator** b
 - 🔊 Integrated SFX when firing
 
 ---
+## 🎬 Demo
+
+---
 
 ## 🧰 Requirements
 
